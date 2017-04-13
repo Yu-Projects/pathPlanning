@@ -11,6 +11,8 @@ for i = 1:numOfPoints
     xPoints(i) = xP;
     yPoints(i) = yP;
 end
+xPoints(end+1) = 0;
+yPoints(end+1) = 0;
 plot(xPoints,yPoints,'*b')
 hold off
 
