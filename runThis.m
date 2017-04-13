@@ -2,6 +2,10 @@ clear all;
 close all;
 figure(1);
 
+% constants
+uavSpeed = 1;
+ugvSpeed = uavSpeed * 0.5;
+
 numOfPoints = 100; % you can use any number, but the problem size scales as N^2
 xPoints = zeros(numOfPoints,1); % allocate x-coordinates of nStops
 yPoints = xPoints; % allocate y-coordinates
@@ -13,6 +17,7 @@ for i = 1:numOfPoints
 end
 xPoints(end+1) = 0;
 yPoints(end+1) = 0;
+numOfPoints = numel(xPoints); 
 plot(xPoints,yPoints,'*b')
 hold off
 
