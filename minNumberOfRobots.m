@@ -1,4 +1,4 @@
-%#ok<*SAGROW>
+ %#ok<*SAGROW>
 
 numOfSites = 11;
 numOfChargingSites = 6;
