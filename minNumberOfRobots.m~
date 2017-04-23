@@ -1,4 +1,4 @@
-%#ok<*SAGROW>
+ %#ok<*SAGROW>
 
 % numOfSites = 11;
 % numOfChargingSites = 6;
@@ -72,18 +72,11 @@ locationOfRobots
 
 
 
-for j = 1:allSites
-    
-    for i : numOfActiveRobots
-        tempArray(end+1) = tiem it takes for ugv to get to current location
-        
-    end
-    
-    possible = check if any element of tempArray < uavtime to get to current location
-        if possible ==1
-            find locations of all 1's in possible
-        else
-            add 1 robot
-        end
-    end
+
+
+for i : numOfActiveRobots
+	tempArray(end+1) = tiem it takes for ugv to get to current location
+
 end
+
+check if any element of tempArray < uavtime to get to current location
