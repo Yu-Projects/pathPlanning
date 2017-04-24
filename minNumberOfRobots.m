@@ -38,18 +38,25 @@ for i = 1:numOfUavSites-1
 end
 
 
-locationOfRobots = [1];
-ugvToCurrent = zeros(1,numOfChargingSites);
-possible = zeros(1,numOfChargingSites);
-ugvToCurrent = [];
-for j = 2:numOfChargingSites
+locationOfRobots = [0];
+for j = 1:numOfChargingSites
     numOfActiveRobots = numel(locationOfRobots);
-    uavToCurrent = uavOnUgvSiteTimes(j);
     ugvToCurrent = [];
+    uavToCurrent = [];
     possible = zeros(1,numOfChargingSites);
+    % calculate uavToCurrent position (j)
     for i = 1:numOfActiveRobots
-        ugvToCurrent(end+1) = ugvSitesDistances(locationOfRobots(i), j);% time it takes for ugv to get to current location
-        if ugvToCurrent(i) < uavToCurrent
+        uavToCurrent(end+1) = sum(uavOnUgvSiteTimes(locationOfRobots(i)+1:j));
+    end
+    
+    
+    for i = 1:numOfActiveRobots
+        if locationOfRobots(i) ==0
+            ugvToCurrent(end+1) = 0;
+        else
+            ugvToCurrent(end+1) = ugvSitesDistances(locationOfRobots(i), j);% time it takes for ugv to get to current location
+        end
+        if ugvToCurrent(i) < uavToCurrent(i)
             possible(i) = 1;
         else
             possible(i) = 0;
