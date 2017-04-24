@@ -42,7 +42,7 @@ locationOfRobots = [1];
 ugvToCurrent = zeros(1,numOfChargingSites);
 possible = zeros(1,numOfChargingSites);
 ugvToCurrent = [];
-for j = 2:numOfChargingSites
+for j = 1:numOfChargingSites
     numOfActiveRobots = numel(locationOfRobots);
     uavToCurrent = uavOnUgvSiteTimes(j);
     ugvToCurrent = [];
@@ -65,8 +65,8 @@ for j = 2:numOfChargingSites
                 ;
             end
         end
-        [~,robotToMove] = find(ugvToCurrent == tempAnswer);
-        locationOfRobots(robotToMove) = j;
+        
+        
     else
         locationOfRobots(end+1) = j;
     end
