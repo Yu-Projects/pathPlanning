@@ -1,17 +1,6 @@
 %#ok<*SAGROW>
 
-% numOfSites = 11;
-% numOfChargingSites = 6;
-% uavSpeed = 1;
-% area = 100;
-% numPoints = 11;
-% uavSites = [1, 2, 3, 4, 5 ,6 ,7 ,8 ,9 ,10, 11]; % vector of site id's
-% ugvSites = [2, 4, 5, 8, 9, 11]; % vector of site id's for UGV charging sites
-% x = randperm(area, numPoints);
-% y = randperm(area, numPoints);
-% corrdinatesOfSites = [x;y]; % 2xn matrix that corresponds with "uavSites"
-% ugvSpeed = uavSpeed * 0.5;
-
+function [locationOfRobots, ugvSitesDistances, uavOnUgvSiteTimes] = minNumberOfRobots(numOfSites, numOfChargingSites, uavSites, ugvSites, corrdinatesOfSites, ugvSpeed)
 ugvSitesDistances = zeros(numOfChargingSites);
 for i = 1:numOfChargingSites
     for j = 1:numOfChargingSites
@@ -37,7 +26,6 @@ for i = 1:numOfUavSites-1
     end
 end
 
-
 locationOfRobots = [0];
 for j = 1:numOfChargingSites
     numOfActiveRobots = numel(locationOfRobots);
@@ -48,7 +36,6 @@ for j = 1:numOfChargingSites
     for i = 1:numOfActiveRobots
         uavToCurrent(end+1) = sum(uavOnUgvSiteTimes(locationOfRobots(i)+1:j));
     end
-    
     
     for i = 1:numOfActiveRobots
         if locationOfRobots(i) ==0
@@ -79,3 +66,7 @@ for j = 1:numOfChargingSites
     end
     
 end
+end
+
+
+
