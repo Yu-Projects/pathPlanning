@@ -1,6 +1,7 @@
 %#ok<*SAGROW>
+%#ok<*NOSEM>
 
-function [locationOfRobots, ugvSitesDistances, uavOnUgvSiteTimes] = minNumberOfRobots(numOfSites, numOfChargingSites, uavSites, ugvSites, corrdinatesOfSites, ugvSpeed)
+function [locationOfRobots, ugvSitesDistances, uavOnUgvSiteTimes, pathsForRobots] = minNumberOfRobots(numOfSites, numOfChargingSites, uavSites, ugvSites, corrdinatesOfSites, ugvSpeed)
 ugvSitesDistances = zeros(numOfChargingSites);
 for i = 1:numOfChargingSites
     for j = 1:numOfChargingSites
@@ -27,6 +28,7 @@ for i = 1:numOfUavSites-1
 end
 
 locationOfRobots = [0];
+pathsForRobots = zeros(1, numOfChargingSites);
 for j = 1:numOfChargingSites
     numOfActiveRobots = numel(locationOfRobots);
     ugvToCurrent = [];
@@ -55,6 +57,11 @@ for j = 1:numOfChargingSites
         for i = 1:numOfActiveRobots
             if possible(i) == 1
                 tempAnswer = min(ugvToCurrent(i), tempAnswer);
+                if tempAnswer == ugvToCurrent(i)
+                    pathsForRobots(j) = i;
+                else
+                    ;
+                end
             else
                 ;
             end
@@ -63,6 +70,7 @@ for j = 1:numOfChargingSites
         locationOfRobots(robotToMove) = j;
     else
         locationOfRobots(end+1) = j;
+        pathsForRobots(j) = numel(locationOfRobots);
     end
     
 end
