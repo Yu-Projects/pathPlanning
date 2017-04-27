@@ -1,7 +1,7 @@
 %#ok<*SAGROW>
 %#ok<*NOSEM>
 
-function [locationOfRobots, ugvSitesDistances, uavOnUgvSiteTimes, pathsForRobots] = minNumberOfRobots(numOfSites, numOfChargingSites, uavSites, ugvSites, corrdinatesOfSites, ugvSpeed)
+function [locationOfRobots, ugvSiteTimes, uavOnUgvSiteTimes, pathsForRobots] = minNumberOfRobots(numOfSites, numOfChargingSites, uavSites, ugvSites, corrdinatesOfSites, ugvSpeed)
 ugvSitesDistances = zeros(numOfChargingSites);
 for i = 1:numOfChargingSites
     for j = 1:numOfChargingSites
@@ -43,7 +43,7 @@ for j = 1:numOfChargingSites
         if locationOfRobots(i) ==0
             ugvToCurrent(end+1) = 0;
         else
-            ugvToCurrent(end+1) = ugvSitesDistances(locationOfRobots(i), j);% time it takes for ugv to get to current location
+            ugvToCurrent(end+1) = ugvSiteTimes(locationOfRobots(i), j);% time it takes for ugv to get to current location
         end
         if ugvToCurrent(i) < uavToCurrent(i)
             possible(i) = 1;
