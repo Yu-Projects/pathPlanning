@@ -1,9 +1,0 @@
-
-K = -5
-x6 = circshift(x5,K);
-y6 = circshift(y5,K);
-corrdinatesOfSites = [x6'; y6'];
-
-minNumberOfRobots(numOfSites, numOfChargingSites, uavSites, ugvSites, corrdinatesOfSites, ugvSpeed)
-
-
