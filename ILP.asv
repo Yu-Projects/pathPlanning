@@ -72,16 +72,13 @@ for i = 1:lendist
     end
 end
 
-%---------------------------------------------%
 for i = 1:lendist
     fromNode = idxs(i,1);
     toNode = idxs(i, 2);
     if tUGV(fromNode, toNode) > tUAV(fromNode, toNode)
-        location(i) = 1;
-        finalTotal(end+1) = 0;
+        location(
     end
 end
-%---------------------------------------------%
 
 opts = optimoptions('intlinprog','Display','off');  % implements the constraints
 [x_tsp,costopt,exitflag,output] = intlinprog(f,intcon, A, b',[],[],lb,ub,opts);
