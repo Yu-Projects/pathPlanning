@@ -16,15 +16,19 @@
 % pathsForRobots: what robot visited every single numOfChargingSites
 
 function [locationOfRobots, ugvSiteTimes, uavOnUgvSiteTimes, pathsForRobots] = minNumberOfRobots(numOfSites, numOfChargingSites, uavSites, ugvSites, corrdinatesOfSites, ugvSpeed)
-ugvSitesDistances = zeros(numOfChargingSites);
-for i = 1:numOfChargingSites
-    for j = 1:numOfChargingSites
-        tempPoint = [corrdinatesOfSites(:,ugvSites(i))'; corrdinatesOfSites(:,ugvSites(j))'];
-        ugvSitesDistances(i, j) = pdist(tempPoint, 'euclidean');
-    end
-end
+% ugvSitesDistances = zeros(numOfChargingSites);
+% for i = 1:numOfChargingSites
+%     for j = 1:numOfChargingSites
+%         tempPoint = [corrdinatesOfSites(:,ugvSites(i))'; corrdinatesOfSites(:,ugvSites(j))'];
+%         ugvSitesDistances(i, j) = pdist(tempPoint, 'euclidean');
+%     end
+% end
+% 
+% ugvSiteTimes = ugvSitesDistances ./ ugvSpeed;
 
-ugvSiteTimes = ugvSitesDistances ./ ugvSpeed;
+[ugvSiteTimes] = createTugv(numOfChargingSites, corrdinatesOfSites, ugvSites, ugvSpeed);
+
+
 numOfUavSites = numel(uavSites);
 numOfUgvSites = numel(ugvSites);
 uavOnUgvSiteTimes = [];
