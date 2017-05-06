@@ -12,8 +12,8 @@
 % OUTPUTS
 % locationOfRobots: final location of each robot that was activated
 % ugvSiteTimes: time it takes to go from all ugvSites to other sites
-% uavOnUgvSiteTimes: time it takes to go from, one ugvSite to another, for the uav so it includes all of the numOfSites
-% pathsForRobots: what robot visited every single numOfChargingSites
+% uavOnUgvSiteTimes: time it takes to go from, one ugvSite to another, in
+% pathsForRobots:
 
 function [locationOfRobots, ugvSiteTimes, uavOnUgvSiteTimes, pathsForRobots] = minNumberOfRobots(numOfSites, numOfChargingSites, uavSites, ugvSites, corrdinatesOfSites, ugvSpeed)
 ugvSitesDistances = zeros(numOfChargingSites);
