@@ -73,6 +73,8 @@ for i = 1:lendist
 end
 
 %---------------------------------------------%
+ugvSiteTimes = createTugv(numOfChargingSites, corrdinatesOfSitesTemp, ugvSites, ugvSpeed);
+uavOnUgvSiteTimes = createTuav(uavSites, ugvSites, corrdinatesOfSitesTemp, numOfUavSites);
 for i = 1:lendist
     fromNode = idxs(i,1);
     toNode = idxs(i, 2);
