@@ -9,21 +9,7 @@
 
 function [uavOnUgvSiteTimes] = createTuav(uavSites, ugvSites, corrdinatesOfSites, numOfUavSites)
 
-j = 1;
-% tempAnswer = 0;
 uavOnUgvSiteTimes = [];
-
-% for i = 1:numOfUavSites-1
-%     tempPoint = [corrdinatesOfSites(:,uavSites(i))'; corrdinatesOfSites(:,uavSites(i+1))'];
-%     tempDistance = pdist(tempPoint, 'euclidean');
-%     tempAnswer = tempDistance + tempAnswer;
-%     if i+1 == ugvSites(j)
-%         uavOnUgvSiteTimes(end+1) = tempAnswer;
-%         tempAnswer = 0;
-%         j = j+1;
-%     end
-% end
-
 numOfUgvSites = numel(ugvSites);
 for i = 2:numOfUgvSites
     k = i;
@@ -35,12 +21,9 @@ for i = 2:numOfUgvSites
         if j+1 == ugvSites(k)
             uavOnUgvSiteTimes(i-1,k) = tempAnswer;
             k = k+1;
-            %             tempAnswer = 0;
-            %             j = j+1;
         end
     end
 end
-
 
 end
 

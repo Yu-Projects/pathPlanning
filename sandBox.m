@@ -1,0 +1,1 @@
+[uavOnUgvSiteTimes, uavTimes] = createTuav(uavSites, ugvSites, corrdinatesOfSitesTemp)

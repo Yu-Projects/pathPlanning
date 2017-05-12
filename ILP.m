@@ -122,42 +122,8 @@ lh = zeros(numOfPoints,1); % Use to store handles to lines on plot
 lh = updateSalesmanPlot(lh,x_tsp,idxs,xPoints,yPoints);
 title('Solution with Subtours');
 
-% tours = detectSubtours(x_tsp,idxs);
 numtours = length(tours); % number of subtours
 fprintf('# of subtours: %d\n',numtours);
-
-% A1 = spalloc(0,lendist,0); % Allocate a sparse linear inequality constraint matrix
-% b1 = [];
-% while numtours > 1 % repeat until there is just one subtour
-%     % Add the subtour constraints
-%     b1 = [b1;zeros(numtours,1)]; % allocate b
-%     A1 = [A1;spalloc(numtours,lendist,numOfPoints)]; % a guess at how many nonzeros to allocate
-%     for i = 1:numtours
-%         rowIdx = size(A1,1)+1; % Counter for indexing
-%         subTourIdx = tours{i}; % Extract the current subtour
-%         %         The next lines find all of the variables associated with the
-%         %         particular subtour, then add an inequality constraint to prohibit
-%         %         that subtour and all subtours that use those stops.
-%         variations = nchoosek(1:length(subTourIdx),2);
-%         for j = 1:length(variations)
-%             whichVar = (sum(idxs==subTourIdx(variations(j,1)),2)) & ...
-%                 (sum(idxs==subTourIdx(variations(j,2)),2));
-%             A1(rowIdx,whichVar) = 1;
-%         end
-%         b1(rowIdx) = length(subTourIdx)-1; % One less trip than subtour stops
-%     end
-%
-%     % Try to optimize again
-%     [x_tsp,costopt,exitflag,output] = intlinprog(dist,intcon,A1,b1,Aeq,beq,lb,ub,opts);
-%
-%     % Visualize result
-%     lh = updateSalesmanPlot(lh,x_tsp,idxs,xPoints,yPoints);
-%
-%     % How many subtours this time?
-%     tours = detectSubtours(x_tsp,idxs);
-%     numtours = length(tours); % number of subtours
-%     fprintf('# of subtours: %d\n',numtours);
-% end
 
 title('Solution with Subtours Eliminated');
 hold off
