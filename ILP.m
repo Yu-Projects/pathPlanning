@@ -122,8 +122,8 @@ lh = zeros(numOfPoints,1); % Use to store handles to lines on plot
 lh = updateSalesmanPlot(lh,x_tsp,idxs,xPoints,yPoints);
 title('Solution with Subtours');
 
-numtours = length(tours); % number of subtours
-fprintf('# of subtours: %d\n',numtours);
+% numtours = length(tours); % number of subtours
+% fprintf('# of subtours: %d\n',numtours);
 
 title('Solution with Subtours Eliminated');
 hold off
