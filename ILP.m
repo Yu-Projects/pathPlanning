@@ -89,7 +89,7 @@ for i = 1:lendist
     toNode = idxs(i, 2);
     if (fromNode > numOfPoints-1) || (toNode > numOfPoints-1)
         location(i,i) = 1;
-        finalTotal(i) = 1;
+        finalTotal(i) = 0;
     else
         if tUGV(fromNode, toNode) > tUAV(fromNode, toNode)
             location(i,i) = 1;
