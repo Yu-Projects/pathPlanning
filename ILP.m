@@ -80,6 +80,27 @@ for i = 1:lendist
     end
 end
 
+% creating ugvSites
+numOfSites = numel(uavSites);
+ugvSites = [];
+tempNoDepotXY = noDepotXY';
+j = 1;
+for i = 1:numOfSites
+    if tempNoDepotXY(j,:) == corrdinatesOfSites(i,:)
+        ugvSites(end+1) = i;
+        j = j+1;
+        if j > numOfPoints-1
+            break;
+        end
+    end
+end
+
+% adds the last point to the UGV tour making the UAV and UGV end at the same location
+if ugvSites(end) ~= uavSites(end)
+    ugvSites(end+1) = uavSites(end);
+end
+
+% calculates tUGV & tUAV
 [tUGV] = createTugv(numOfPoints-1, noDepotXY, sites, ugvSpeed);
 [tUAV] = createTuav(uavSites, ugvSites, corrdinatesOfSites, numOfSites);
 
