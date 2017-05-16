@@ -150,4 +150,6 @@ title('Solution with Subtours');
 title('Solution with Subtours Eliminated');
 hold off
 
+waitTimeUAV = calculateWaitUAV(tUAV, tUGV, numOfPoints-1);
+
 % disp(output.absolutegap)
