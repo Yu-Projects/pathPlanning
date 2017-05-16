@@ -102,7 +102,7 @@ end
 
 % calculates tUGV & tUAV
 [tUGV] = createTugv(numOfPoints-1, noDepotXY, sites, ugvSpeed);
-[tUAV] = createTuav(uavSites, ugvSites, corrdinatesOfSites, numOfSites);
+[tUAV] = createTuav(uavSites, ugvSites, corrdinatesOfSites', numOfSites);
 
 location = [];
 finalTotal = [];
