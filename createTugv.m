@@ -4,7 +4,7 @@
 % numOfChargingSites:
 % corrdinatesOfSites: 
 % ugvSites: 
-% ugvSpeed: ugv speed in relation to uav speed
+% ugvSpeed: ugv speed in relation to uav speed (less equal to 1)
 % OUTPUTS
 % ugvSiteTimes: matrix that contains all the times it takes for the ugv to go from one site to another
 

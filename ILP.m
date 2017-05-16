@@ -7,7 +7,7 @@ figure(1);
 % ugvSpeed = uavSpeed * 0.5;
 
 % creating the points for the problem
-numOfPoints = 11; % you can use any number, but the problem size scales as N^2
+% numOfPoints = 11; % you can use any number, but the problem size scales as N^2
 % xPoints = zeros(numOfPoints,1); % allocate x-coordinates of nStops
 % yPoints = xPoints; % allocate y-coordinates
 % for i = 1:numOfPoints
@@ -16,6 +16,7 @@ numOfPoints = 11; % you can use any number, but the problem size scales as N^2
 %     xPoints(i) = xP;
 %     yPoints(i) = yP;
 % end
+ugvSpeed = UGVSpeed^(-1);
 xPoints = x6;
 yPoints = y6;
 % xPoints(end+1) = 0; % adding depot node
@@ -80,7 +81,7 @@ for i = 1:lendist
 end
 
 [tUGV] = createTugv(numOfPoints-1, noDepotXY, sites, ugvSpeed);
-[tUAV] = createTuav(uavSites, ugvSites, corrdinatesOfSitesTemp, numOfSites);
+[tUAV] = createTuav(uavSites, ugvSites, corrdinatesOfSites, numOfSites);
 
 location = [];
 finalTotal = [];
