@@ -150,4 +150,4 @@ title('Solution with Subtours');
 title('Solution with Subtours Eliminated');
 hold off
 
-disp(output.absolutegap)
+% disp(output.absolutegap)
