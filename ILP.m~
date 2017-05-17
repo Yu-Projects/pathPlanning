@@ -153,24 +153,7 @@ hold off
 waitTimeUAV = calculateWaitUAV(tUAV, tUGV, numOfPoints-1);
 
 % second ILP formulation
-[tspEdges] = findEdgesUsedILP(x_tsp, idxs);
-[numPaths, numSitesUsed] = findNumPaths(tspEdges);
-[minUGVs] = findMinNumUGVs(numPaths, numSitesUsed, numOfPoints);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+tours = detectSubtours(x_tsp,idxs); % c
+numtours = length(tours);
 
 % disp(output.absolutegap)

@@ -1,0 +1,17 @@
+% findEdgesUsedTSP
+% finds the number of edges that are created by the ILP solver
+% INPUTS
+% x = x_tsp given from intlinprog
+% OUTPUTS
+
+
+function [edges] = findEdgesUsedILP(x)
+tspEdges = [];
+numOfLocationOfOnes = numel(locationOfOnes);
+for i = 1:numOfLocationOfOnes
+    tspEdges(end+1,:) = idxs(locationOfOnes(i),:);
+end
+
+
+end
+
