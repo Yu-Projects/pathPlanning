@@ -8,7 +8,7 @@
 % numOfPoints = numPointsInit; % you can use any number, but the problem size scales as N^2
 uavSpeed = 1;
 % ugvSpeed = uavSpeed/UGVSpeed;
-ugvSpeed = 0.5;
+ugvSpeed = 1/8;
 xPoints = GLNSx';
 yPoints = GLNSy';
 xyPoints = [xPoints';yPoints'];
@@ -27,6 +27,14 @@ end
 corrdinatesOfSitesTemp = [GLNSx(1:end-1); GLNSy(1:end-1)];
 ugvSites = [];
 typeTwoEdges = zeros(2,1);
+
+if GLNSSolution(1)>length(v_Type)    
+    GLNSSolution = GLNSSolution(2:end);
+elseif GLNSSolution(end)>length(v_Type)
+    GLNSSolution = GLNSSolution(1:end-1);
+else
+    disp('error')
+end
 
 count = 1;
 count1 = 1;
@@ -105,8 +113,8 @@ for i = 1:lendist
     end
 end
 
-[tUGVPrior] = createTugv(numel(ugvSites), noDepotXY, ugvSites, UGVS^-1);
-[tUAV] = createTuav(uavSites, ugvSites, corrdinatesOfSitesTemp, numOfSites);
+[tUGVPrior] = createTugv(numel(ugvSites), xyPoints, ugvSites, 1);
+[tUAV] = createTuav(uavSites, ugvSites, xyPoints, numOfSites);
 tUGV = tUGVPrior / ugvSpeed;
 location = [];                  % creating constraints
 finalTotal = [];

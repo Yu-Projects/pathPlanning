@@ -1,0 +1,1 @@
+plot(finalDataForPlot(:,1),finalDataForPlot(:,2),finalDataForPlot(:,1),finalDataForPlot(:,3),finalDataForPlot(:,1),finalDataForPlot(:,4),finalDataForPlot(:,1),finalDataForPlot(:,5))
