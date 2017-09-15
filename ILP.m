@@ -1,35 +1,58 @@
 %clear all;
 %close all;
-figure(1);
-
 % constants
 % uavSpeed = 1;
 % ugvSpeed = uavSpeed * 0.5;
 
 % creating the points for the problem
-% numOfPoints = 11; % you can use any number, but the problem size scales as N^2
-% xPoints = zeros(numOfPoints,1); % allocate x-coordinates of nStops
-% yPoints = xPoints; % allocate y-coordinates
-% for i = 1:numOfPoints
-%     xP = rand*1.5;
-%     yP = rand;
-%     xPoints(i) = xP;
-%     yPoints(i) = yP;
-% end
-ugvSpeed = UGVSpeed^(-1);
-xPoints = x6;
-yPoints = y6;
-% xPoints(end+1) = 0; % adding depot node
-% yPoints(end+1) = 0; % adding depot node
+% numOfPoints = numPointsInit; % you can use any number, but the problem size scales as N^2
+uavSpeed = 1;
+% ugvSpeed = uavSpeed/UGVSpeed;
+ugvSpeed = 0.5;
+xPoints = GLNSx';
+yPoints = GLNSy';
 xyPoints = [xPoints';yPoints'];
 numOfPoints = numel(xPoints);
 noDepotXY = xyPoints(:,1:numOfPoints-1);
 sites = 1:numOfPoints-1;
+figure();
 plot(xPoints,yPoints,'*b')
 hold off
 
+numOfSites = numPointsInit;
+uavSites = zeros(1,numOfSites);
+for i = 1:numOfSites
+    uavSites(i) = i;
+end
+corrdinatesOfSitesTemp = [GLNSx(1:end-1); GLNSy(1:end-1)];
+ugvSites = [];
+typeTwoEdges = zeros(2,1);
+
+count = 1;
+count1 = 1;
+for a = 1:numel(GLNSSolution)-1
+    temp = v_Type(GLNSSolution(a), GLNSSolution(a+1));
+    if temp == 1
+        
+    elseif temp == 2
+        ugvSites(end+1) = a;
+        ugvSites(end+1) = a+1;
+        typeTwoEdges(1, count) = a;
+        typeTwoEdges(2, count) = a+1;
+        typeTwoEdgesBasic(1,count) = count1;
+        count1 = count1+1;
+        typeTwoEdgesBasic(2,count) = count1;
+        count1 = count1+1;
+        count = count + 1;
+    elseif temp == 3
+        ugvSites(end+1) = a+1;
+    else
+        fprintf('error')
+    end
+end
+ugvSites(end+1) = numel(uavSites);
 % creating the initial constraints of the problem intlinprog
-idxs = nchoosek(1:numOfPoints,2); % all possible paths
+idxs = nchoosek(1:numel(ugvSites),2); % all possible paths
 dist = hypot(yPoints(idxs(:,1)) - yPoints(idxs(:,2)), xPoints(idxs(:,1)) - xPoints(idxs(:,2))); % gets distances for all combinations in idxs
 lendist = numel(dist);
 edgeCostMatrix = [idxs, dist];
@@ -40,13 +63,13 @@ intcon = 1:lendist; % which values are integers(all values left out are not spec
 
 % creating upper and lower bound for problem (based on environment size)
 lb = zeros(lendist,1);  % lower bound for intlinprog (based off of the lower bound for xPoints & yPoints)
-ub = ones(lendist,1)*100;   % upper bound for intlinprog (based off of the upper bound for xPoints & yPoints)
+ub = ones(lendist,1)*200;   % upper bound for intlinprog (based off of the upper bound for xPoints & yPoints)
 
 A1 = spalloc(0,lendist,0); % Allocate a sparse linear inequality constraint matrix
-b1 = ones(numOfPoints-1,1);
+% b1 = ones(numOfPoints-1,1);
 % all outgoing edges have to add up to <=1
-for j = 1:numOfPoints
-    for i = 1:lendist
+for j = 1:numOfPoints           % creating less than or equal to constraints
+    for i = 1:lendist           % leaving a node has to be less than or equal to one
         yi = idxs(i,1);
         if yi == j
             A1(j, i) = 1;
@@ -54,12 +77,13 @@ for j = 1:numOfPoints
     end
 end
 A1 = full(A1);
+b1 = ones(numel(A1(:,1)),1);
 [A1, b1, ~, ~] = removeRowCol(A1, b1);
 
 A2 = spalloc(0,lendist,0);
-b2 = ones(numOfPoints,1);
+% b2 = ones(numOfPoints,1);
 % all incoming edges have to add up to <=1
-for j = 2:numOfPoints
+for j = 2:numOfPoints       % entering a node has to be less than or equal to one
     for i = 1:lendist
         yj = idxs(i,2);
         if yj == j
@@ -68,6 +92,7 @@ for j = 2:numOfPoints
     end
 end
 A2 = full(A2);
+b2 = ones(numel(A2(:,1)),1);
 [A2, b2, ~, ~] = removeRowCol(A2, b2);
 
 A = [A1;A2]; % combining A & B
@@ -80,31 +105,10 @@ for i = 1:lendist
     end
 end
 
-% creating ugvSites
-numOfSites = numel(uavSites);
-ugvSites = [];
-tempNoDepotXY = noDepotXY';
-j = 1;
-for i = 1:numOfSites
-    if tempNoDepotXY(j,:) == corrdinatesOfSites(i,:)
-        ugvSites(end+1) = i;
-        j = j+1;
-        if j > numOfPoints-1
-            break;
-        end
-    end
-end
-
-% adds the last point to the UGV tour making the UAV and UGV end at the same location
-if ugvSites(end) ~= uavSites(end)
-    ugvSites(end+1) = uavSites(end);
-end
-
-% calculates tUGV & tUAV
-[tUGV] = createTugv(numOfPoints-1, noDepotXY, sites, ugvSpeed);
-[tUAV] = createTuav(uavSites, ugvSites, corrdinatesOfSites', numOfSites);
-
-location = [];
+[tUGVPrior] = createTugv(numel(ugvSites), noDepotXY, ugvSites, UGVS^-1);
+[tUAV] = createTuav(uavSites, ugvSites, corrdinatesOfSitesTemp, numOfSites);
+tUGV = tUGVPrior / ugvSpeed;
+location = [];                  % creating constraints
 finalTotal = [];
 for i = 1:lendist
     fromNode = idxs(i,1);
@@ -123,6 +127,35 @@ for i = 1:lendist
     end
 end
 
+locationOfMembers = ismember(idxs(:,1), typeTwoEdgesBasic(1,:));    % making it so only type two can leave the nodes
+location(locationOfMembers, :) = 0;
+finalTotal(:,locationOfMembers) = 0;
+
+locationOfMembers = ismember(idxs(:,2), typeTwoEdgesBasic(2,:));    % making it so only type two can enter the nodes
+location(locationOfMembers, :) = 0;
+finalTotal(:,locationOfMembers) = 0;
+
+[~,m] = size(typeTwoEdges);
+for i = 1:m                     % adding type two edges, but need to make sure you force them not just allow them to be used
+    temp1 = find(ugvSites == typeTwoEdges(1,i));
+    temp2 = find(ugvSites == typeTwoEdges(2,i));
+    temp3 = ismember(idxs, [temp1,temp2]);
+    for j = 1:length(idxs)
+        if temp3(j,1)+temp3(j,2) == 2
+            temp4 = j;
+            break
+        end
+    end
+    temp5 = find(location(:, temp4) == 1);
+    if finalTotal(temp5) == 0
+        finalTotal(temp5) = 1;
+    else
+        location(end+1,temp4) = 1;
+        finalTotal(end+1) = 1;
+    end
+end
+
+
 removeMatrix = [];
 for i = 1:lendist
     if finalTotal(i) == 1
@@ -130,18 +163,28 @@ for i = 1:lendist
     end
 end
 
+
+
 locationRemoved = location;
 locationRemoved(removeMatrix,:) = [];
 finalTotalRemoved = finalTotal;
 finalTotalRemoved(:,removeMatrix) = [];
 
 opts = optimoptions('intlinprog','Display','off');  % implements the constraints
-[x_tsp,costopt,exitflag,output] = intlinprog(f,intcon, A, b',locationRemoved,finalTotalRemoved,lb,ub,opts);
+[x_tsp,costopt,exitflag,output] = intlinprog(f,intcon, A, b',locationRemoved,finalTotalRemoved,lb,ub,opts)
 
 hold on
 segments = find(x_tsp); % Get indices of lines on optimal path
 lh = zeros(numOfPoints,1); % Use to store handles to lines on plot
-lh = updateSalesmanPlot(lh,x_tsp,idxs,xPoints,yPoints);
+% n = 0;
+% m = 0;
+[n,m] = size(idxs);
+idxsInUGVPoints = zeros(n,m);
+for i = 1:numel(idxs)
+    idxsInUGVPoints(i) = ugvSites(idxs(i));
+end
+
+lh = updateSalesmanPlot(lh,x_tsp,idxsInUGVPoints,xPoints,yPoints);
 title('Solution with Subtours');
 
 % numtours = length(tours); % number of subtours
@@ -150,27 +193,4 @@ title('Solution with Subtours');
 title('Solution with Subtours Eliminated');
 hold off
 
-waitTimeUAV = calculateWaitUAV(tUAV, tUGV, numOfPoints-1);
-
-% second ILP formulation
-[tspEdges] = findEdgesUsedILP(x_tsp, idxs);
-[numPaths, numSitesUsed] = findNumPaths(tspEdges);
-[minUGVs] = findMinNumUGVs(numPaths, numSitesUsed, numOfPoints);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-% disp(output.absolutegap)
+disp(output.absolutegap);
